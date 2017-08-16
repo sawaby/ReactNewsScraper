@@ -10,7 +10,7 @@ var bodyParser = require("body-parser");
 var scrape = require("./scripts/scrape.js");
 
 // Bring article and notes from the controller
-var articleController = require("./controllers/article");
+// var articleController = require("./controllers/article");
 
 // Set up our port to be either the host's designated port, or 3000
 var PORT = process.env.PORT || 3000;
@@ -44,7 +44,7 @@ app.use(router);
 
 
 // If deployed, use the deployed database. Otherwise use the local mongoHeadlines database
-var db = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+var db = process.env.MONGODB_URI || "mongodb://localhost:27017/mongoHeadlines";
 
 // Connect mongoose to our database
 mongoose.connect(db, function(error) {
@@ -58,26 +58,30 @@ mongoose.connect(db, function(error) {
   }
 });
   // This route renders the homepage
-  router.get("/", function(req, res) {
+ router.get("/", function(req, res) {
     res.render("home");
-  });
+ });
 
   // This route renders the saved handledbars page
   router.get("/saved", function(req, res) {
        var query = {};
-    if (req.query.saved) {
-      query = req.query;
-    }
+      console.log('get request data!!', req.query)
+ // if (req.query.saved) {
+    //   query = req.query;
+    // }
     // res.render("/");
+    res.status(200);
+    res.send(req.query);
 
-     articleController.get(query, function(data) {
-      // Send the article data back as JSON
-      res.json(data);
-    });
+    //  articleController.get(query, function(data) {
+    //   // Send the article data back as JSON
+    //   res.json(data);
+    // });
   });
  router.post("/saved", function(req, res) {
     res.render("saved");
-  });
+ });
+
    router.delete("/saved", function(req, res) {
     res.render("saved");
   });
